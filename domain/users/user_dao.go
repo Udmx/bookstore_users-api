@@ -4,6 +4,7 @@ package users
 
 import (
 	"fmt"
+	"github.com/udmx/bookstore_users-api/datasources/mysql/users_db"
 	"github.com/udmx/bookstore_users-api/utils/date_utils"
 	"github.com/udmx/bookstore_users-api/utils/errors"
 )
@@ -27,6 +28,10 @@ func (user *User) Get() *errors.RestErr {
 }
 
 func (user *User) Save() *errors.RestErr {
+	if err := users_db.Client.Ping(); err != nil {
+		panic(err) //try to connect
+	}
+
 	current := usersDB[user.Id]
 	if current != nil {
 		if current.Email == user.Email {
