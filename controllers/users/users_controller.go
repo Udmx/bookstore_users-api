@@ -6,6 +6,7 @@ import (
 	"github.com/udmx/bookstore_users-api/services"
 	"github.com/udmx/bookstore_users-api/utils/errors"
 	"net/http"
+	"strconv"
 )
 
 func CreateUser(c *gin.Context) {
@@ -30,7 +31,7 @@ func CreateUser(c *gin.Context) {
 		//	Status:  http.StatusBadRequest,
 		//	Error:   "bad_request",
 		//}
-		restErr:=errors.NewBadRequestError("invalid json body")
+		restErr := errors.NewBadRequestError("invalid json body")
 		c.JSON(restErr.Status, restErr)
 		return
 	}
@@ -44,5 +45,18 @@ func CreateUser(c *gin.Context) {
 }
 
 func GetUser(c *gin.Context) {
-	c.String(http.StatusNotImplemented, "implement me!")
+	userId, userErr := strconv.ParseInt(c.Param("user_id"), 10, 64)
+	if userErr != nil {
+		err := errors.NewBadRequestError("user id should be a number")
+		c.JSON(err.Status, err)
+		return
+	}
+
+	result, getErr := services.GetUser(userId)
+	if getErr != nil {
+		//Handle user creation error
+		c.JSON(getErr.Status, getErr)
+		return
+	}
+	c.JSON(http.StatusOK, result)
 }
