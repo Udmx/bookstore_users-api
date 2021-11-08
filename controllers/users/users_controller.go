@@ -11,26 +11,8 @@ import (
 
 func CreateUser(c *gin.Context) {
 	var user users.User
-	//bytes, err := ioutil.ReadAll(c.Request.Body)
-	//if err != nil {
-	//	//TODO: Handle error
-	//	return
-	//}
-	//if err := json.Unmarshal(bytes, &user); err != nil {
-	//	fmt.Println(err.Error())
-	//	//TODO: Handle json error
-	//	return
-	//}
 
-	// Replace code:
 	if err := c.ShouldBindJSON(&user); err != nil {
-		//fmt.Println(err.Error())
-		// Handle json error => return bad request to the caller.
-		//restErr := errors.RestErr{
-		//	Message: "invalid json body",
-		//	Status:  http.StatusBadRequest,
-		//	Error:   "bad_request",
-		//}
 		restErr := errors.NewBadRequestError("invalid json body")
 		c.JSON(restErr.Status, restErr)
 		return
