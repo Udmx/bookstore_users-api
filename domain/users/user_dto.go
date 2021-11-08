@@ -25,3 +25,5 @@ func (user *User) Validate() *errors.RestErr {
 	}
 	return nil
 }
+
+
